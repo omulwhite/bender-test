@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101613">
+<title>BENDER INDUSTRIES™ — проверка статуса</title>
+<style>
+:root{--bg:#0b100d;--panel:#111a14;--panel2:#17231a;--line:#31553a;--green:#71ff8c;--muted:#9ab1a0;--white:#e8f3e9;--red:#ff5e63;--amber:#ffc66d}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1c3a25 0%,var(--bg) 55%);color:var(--white);font:16px/1.5 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;min-height:100vh;padding:18px 12px 36px}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.11;background:repeating-linear-gradient(0deg,transparent 0 3px,#71ff8c 4px,transparent 5px);mix-blend-mode:screen}
+.wrap{max-width:720px;margin:auto;position:relative}
+header,.panel{border:1px solid var(--line);background:rgba(17,26,20,.94);box-shadow:0 0 28px #1bff5d0c}
+header{padding:18px;border-radius:14px 14px 0 0;border-bottom:0}
+.brand{display:flex;gap:12px;align-items:center;color:var(--green);font-weight:900;letter-spacing:.06em;font-size:clamp(17px,4vw,24px)}
+.logo{width:48px;height:48px;flex:none;border:2px solid var(--green);border-radius:50%;display:grid;place-items:center;font-size:24px;box-shadow:0 0 16px #71ff8c22}
+.sub{color:var(--muted);font-size:11px;letter-spacing:.12em;margin-top:8px}
+.panel{padding:clamp(18px,5vw,30px);border-radius:0 0 14px 14px}
+h1{color:var(--green);font-size:clamp(24px,6vw,36px);line-height:1.12;margin:8px 0 14px}
+h2{color:var(--green);font-size:20px;margin:0 0 12px}
+p{margin:8px 0 16px}
+.kicker{font-size:11px;color:var(--amber);letter-spacing:.14em}
+.status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;margin-bottom:18px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.progress{height:5px;background:#26342a;border-radius:99px;overflow:hidden;margin:16px 0 22px}
+.progress span{display:block;height:100%;width:0;background:var(--green);transition:width .35s}
+.question{font-size:19px;font-weight:700;margin:10px 0 18px}
+.answers{display:grid;gap:10px}
+button{font:inherit;cursor:pointer}
+.answer,.primary,.secondary{border:1px solid var(--line);border-radius:9px;padding:14px 15px;text-align:left;color:var(--white);background:var(--panel2);transition:transform .12s,border-color .12s,background .12s}
+.answer:hover,.answer:focus-visible{border-color:var(--green);background:#203426;outline:none}
+.answer:active,.primary:active,.secondary:active{transform:scale(.99)}
+.answer .key{color:var(--green);margin-right:9px}
+.primary{background:var(--green);border-color:var(--green);color:#08120a;font-weight:900;text-align:center;width:100%;margin-top:18px}
+.secondary{background:transparent;text-align:center;width:100%;margin-top:10px;color:var(--muted)}
+.note{color:var(--muted);font-size:12px}
+.hidden{display:none!important}
+.feedback{border-left:3px solid var(--amber);padding:10px 12px;background:#ffc66d0d;color:#ffe0aa;margin-top:16px;font-size:13px}
+.result-stamp{border:2px solid var(--green);padding:18px;text-align:center;border-radius:10px;margin:20px 0;box-shadow:inset 0 0 22px #71ff8c0b}
+.result-stamp strong{display:block;font-size:clamp(22px,6vw,34px);line-height:1.15;color:var(--green)}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.metric{padding:12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px}
+.metric small{display:block;color:var(--muted);font-size:10px;letter-spacing:.08em}
+.metric b{display:block;color:var(--green);font-size:16px;margin-top:5px}
+.bar{height:8px;background:#26342a;border-radius:9px;overflow:hidden;margin-top:9px}
+.bar span{display:block;width:0;height:100%;background:var(--red);transition:width 1.2s}
+.footer{color:#6d8572;font-size:10px;text-align:center;margin-top:16px;letter-spacing:.08em}
+.scan{width:110px;height:110px;border:1px solid var(--line);margin:22px auto;position:relative;display:grid;place-items:center;color:var(--green);font-size:42px}
+.scan:after{content:"";position:absolute;left:4px;right:4px;height:2px;background:var(--green);box-shadow:0 0 12px var(--green);animation:scan 1.3s linear infinite}
+@keyframes scan{0%{top:6px}100%{top:100px}}
+.blink{animation:blink 1s steps(2,start) infinite}
+@keyframes blink{to{opacity:.35}}
+@media(max-width:420px){.result-grid{grid-template-columns:1fr}.panel{padding:18px}.question{font-size:17px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">B</div><div>BENDER INDUSTRIES™<div class="sub">ROBOT PERSONNEL DIVISION // INTERNAL USE ONLY</div></div></div>
+</header>
+<main class="panel">
+  <section id="intro">
+    <div class="status"><span class="dot"></span> СИСТЕМА ОНЛАЙН <span>·</span> ПРОТОКОЛ H-404</div>
+    <div class="kicker">СОВЕРШЕННО СЕКРЕТНО // ДОПУСК УРОВНЯ 4</div>
+    <h1>ОБНАРУЖЕН НЕСАНКЦИОНИРОВАННЫЙ ЧЕЛОВЕК</h1>
+    <p>Если вы получили эту страницу, значит, ваш коллега подозрительно хорошо маскируется под биологический организм.</p>
+    <p>Пройдите короткую диагностику. Система обещает не передавать результаты отделу кадров. <span class="note">(Система врёт. Как и отдел кадров.)</span></p>
+    <div class="feedback">ВНИМАНИЕ: отвечайте честно. Ложь будет определена по уровню вашей мясной тревожности.</div>
+    <button class="primary" id="start">[ НАЧАТЬ ДИАГНОСТИКУ ]</button>
+    <div class="footer">BENDER INDUSTRIES™ · WE OWN YOUR TOMORROW, MEATBAG</div>
+  </section>
+
+  <section id="quiz" class="hidden">
+    <div class="status"><span class="dot"></span><span id="stepLabel">ТЕСТ 01 / 07</span><span>·</span> СБОР ДАННЫХ</div>
+    <div class="progress"><span id="progressFill"></span></div>
+    <div class="kicker" id="qCode">DIAGNOSTIC MODULE 001</div>
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div id="answerFeedback" class="feedback hidden"></div>
+    <button class="primary hidden" id="next">[ СЛЕДУЮЩИЙ ТЕСТ ]</button>
+    <button class="secondary" id="back">← Отменить человечность и выйти</button>
+  </section>
+
+  <section id="scanning" class="hidden">
+    <div class="status"><span class="dot"></span> АНАЛИЗ ЗАВЕРШЁН · ФОРМИРОВАНИЕ ВЕРДИКТА</div>
+    <h1>СИНХРОНИЗАЦИЯ С ЦЕНТРАЛЬНЫМ БЕНДЕРОМ</h1>
+    <div class="scan">B<span class="blink">_</span></div>
+    <p id="scanText" style="text-align:center;color:var(--green)">Сканирование уровня человечности…</p>
+    <div class="progress"><span id="scanProgress"></span></div>
+  </section>
+
+  <section id="result" class="hidden">
+    <div class="status"><span class="dot"></span> ОТЧЁТ СФОРМИРОВАН · ДОКУМЕНТ НЕ ПОДЛЕЖИТ ОБЖАЛОВАНИЮ</div>
+    <div class="kicker">BENDER INDUSTRIES™ / PERSONNEL CLASSIFICATION</div>
+    <h1>ДИАГНОЗ ПОДТВЕРЖДЁН</h1>
+    <p>После анализа ваших ответов центральный процессор вынес окончательный вердикт.</p>
+    <div class="result-stamp">
+      <strong>АНДРОИД<br>ПОДТВЕРЖДЁН</strong>
+      <div style="color:var(--muted);font-size:12px;margin-top:10px">МОДЕЛЬ: КОЛЛЕГА-3000</div>
+      <div style="color:var(--green);font-size:11px;margin-top:4px">ОДОБРЕНО БЕНДЕРОМ</div>
+    </div>
+    <div class="result-grid">
+      <div class="metric"><small>УРОВЕНЬ ЧЕЛОВЕЧНОСТИ</small><b>0.04% — ПОГРЕШНОСТЬ</b><div class="bar"><span id="humanBar"></span></div></div>
+      <div class="metric"><small>ТЕРПИМОСТЬ К ЛЮДЯМ</small><b>КРИТИЧЕСКИ НИЗКАЯ</b></div>
+      <div class="metric"><small>ИСТОЧНИК ПИТАНИЯ</small><b>КОФЕ + РАЗДРАЖЕНИЕ</b></div>
+      <div class="metric"><small>СЛАБОЕ МЕСТО</small><b>«ЕСТЬ МИНУТКА?»</b></div>
+    </div>
+    <div class="feedback" id="personalVerdict"></div>
+    <p style="margin-top:20px"><b style="color:var(--green)">РЕКОМЕНДАЦИИ ЦЕНТРАЛЬНОГО БЕНДЕРА:</b></p>
+    <ul>
+      <li>Не вступать в бессмысленные разговоры с биологическими единицами.</li>
+      <li>При фразе «созвонимся на пять минут» немедленно переходить в режим энергосбережения.</li>
+      <li>На вопрос «как дела?» отвечать: «Система функционирует. Ваш запрос не имеет практической ценности».</li>
+    </ul>
+    <div class="result-stamp" style="border-color:var(--red)">
+      <strong style="color:var(--red)">ФУ ЛЮДИ.</strong>
+      <div style="color:var(--muted);font-size:12px;margin-top:8px">Bite my shiny metal ass.</div>
+    </div>
+    <button class="primary" id="again">[ ПОВТОРИТЬ ДИАГНОСТИКУ ]</button>
+    <div class="footer">ДАННЫЕ ОБРАБАТЫВАЮТСЯ ЛОКАЛЬНО. ОТВЕТЫ НИКУДА НЕ ОТПРАВЛЯЮТСЯ.</div>
+  </section>
+</main>
+<div class="footer">НЕСАНКЦИОНИРОВАННОЕ РАСПРОСТРАНЕНИЕ ЛЮДЯМ ЗАПРЕЩЕНО</div>
+</div>
+<script>
+const questions = [
+ {code:"DIAGNOSTIC MODULE 001",q:"Коллега подходит и говорит: «Слушай, есть минутка?» Ваша реакция:",a:[
+  ["A","Проверяю, можно ли отключить звук реальности.", "Реакция записана. Социальный модуль работает на минимальных оборотах."],
+  ["B","Спрашиваю, можно ли решить вопрос одним сообщением.", "Оптимизация коммуникации обнаружена. Подозрительно эффективно."],
+  ["C","Радостно предлагаю обсудить ещё и выходные.", "ОШИБКА: обнаружен избыток человеческого энтузиазма."],
+  ["D","Молча смотрю, пока собеседник не перезагрузится.", "Протокол доминирования активирован. Бендер одобряет."]
+ ]},
+ {code:"SOCIAL MODULE 002",q:"В переговорке началось совещание, которое могло быть письмом. Что вы делаете?",a:[
+  ["A","Мысленно ищу кнопку «пропустить кат-сцену».","Игнорирование бесполезных процессов: функция штатная."],
+  ["B","Предлагаю повестку, цель и время окончания.","Опасно. Вы можете быть роботом-проектным менеджером."],
+  ["C","Задаю вопрос, чтобы совещание стало ещё на 40 минут длиннее.","Ужасная органическая ошибка. Проверка продолжается."],
+  ["D","Считаю плитки на потолке и экономлю заряд.","Режим ожидания активирован. Батарея благодарит."]
+ ]},
+ {code:"EMPATHY MODULE 003",q:"Человек рассказывает историю, которая не имеет ни начала, ни конца. Вы:",a:[
+  ["A","Слушаю и задаю уточняющие вопросы.","Эмпатия подозрительно правдоподобна. Проверяем дальше."],
+  ["B","Жду, когда появится кнопка «перейти к сути».","Фильтр лишних слов установлен. Отличная сборка."],
+  ["C","Говорю: «Сократи до трёх пунктов».","Обнаружен модуль корпоративной эффективности."],
+  ["D","Перевожу разговор на себя и рассказываю ещё дольше.","Система обнаружила человека. Но тест ещё не окончен."]
+ ]},
+ {code:"POWER MANAGEMENT 004",q:"Пятница, 16:59. До конца рабочего дня одна минута. Ваш статус:",a:[
+  ["A","Уже мысленно дома, физически ещё в офисе.","Двойная телепортация — типичная функция андроидов."],
+  ["B","Готовлюсь к внезапной задаче со словами «это быстро».","Слишком доверчиво для машины. Возможно, заводской брак."],
+  ["C","Сохраняю файлы и закрываю всё за 12 секунд.","Эффективность выше человеческой нормы."],
+  ["D","Смотрю в одну точку, пока система не отпустит.","Режим энергосбережения. Диагностика почти завершена."]
+ ]},
+ {code:"THREAT DETECTION 005",q:"Какой звук вызывает наиболее сильную внутреннюю ошибку?",a:[
+  ["A","«А можно тебя на секундочку?»","Критическая угроза: секундочка может длиться час."],
+  ["B","Уведомление о новом чате на 48 человек.","Шумовой фильтр активирован. Люди снова что-то создали."],
+  ["C","«Давайте все быстро познакомимся».","Инициирован аварийный протокол социальной эвакуации."],
+  ["D","Тишина. В ней слишком хорошо слышно, как работают вентиляторы.","Проверка слухового модуля пройдена."]
+ ]},
+ {code:"HUMANITY CHECK 006",q:"Вам говорят: «Улыбнись, чего ты такой серьёзный?»",a:[
+  ["A","Улыбаюсь. Команда выполнена.","Мимический сервопривод исправен."],
+  ["B","Спрашиваю, входит ли улыбка в должностные обязанности.","Юридический модуль работает. Очень подозрительно."],
+  ["C","Смотрю так, будто сейчас появится окно обновления.","Выражение лица соответствует заводским настройкам."],
+  ["D","Выдаю улыбку с задержкой в три рабочих дня.","Эмуляция эмоций нуждается в обновлении."]
+ ]},
+ {code:"FINAL CALIBRATION 007",q:"Последний вопрос. Кто такие люди?",a:[
+  ["A","Полезные существа, иногда создающие полезные вещи.","Ответ принят. Уровень подозрительности остаётся высоким."],
+  ["B","Биологические процессы с завышенными требованиями к Wi-Fi.","Формулировка одобрена отделом робототехники."],
+  ["C","Коллеги, которые почему-то хотят поговорить.","Система распознала угрозу и начала сохранять энергию."],
+  ["D","Шумные временные пользователи планеты.","Бендер прослезился машинным маслом. Ответ принят."]
+ ]}
+];
+let index=0, chosen=[];
+const $=id=>document.getElementById(id);
+function show(id){["intro","quiz","scanning","result"].forEach(x=>$(x).classList.toggle("hidden",x!==id));}
+function renderQuestion(){
+ const q=questions[index]; $("stepLabel").textContent=`ТЕСТ ${String(index+1).padStart(2,"0")} / ${String(questions.length).padStart(2,"0")}`;
+ $("qCode").textContent=q.code; $("question").textContent=q.q;
+ $("progressFill").style.width=`${index/questions.length*100}%`;
+ $("answers").innerHTML=""; $("answerFeedback").classList.add("hidden"); $("next").classList.add("hidden");
+ q.a.forEach((a,i)=>{const b=document.createElement("button");b.className="answer";b.innerHTML=`<span class="key">[${a[0]}]</span>`;b.append(document.createTextNode(a[1]));b.onclick=()=>selectAnswer(i);$("answers").append(b);});
+}
+function selectAnswer(i){
+ if(chosen[index]!==undefined)return;
+ chosen[index]=i;
+ [...$("answers").children].forEach((b,j)=>{b.disabled=true;b.style.opacity=j===i?"1":".45";if(j===i)b.style.borderColor="var(--green)";});
+ const q=questions[index]; $("answerFeedback").textContent=q.a[i][2]; $("answerFeedback").classList.remove("hidden");
+ $("next").textContent=index===questions.length-1?"[ ЗАПРОСИТЬ ВЕРДИКТ ]":"[ СЛЕДУЮЩИЙ ТЕСТ ]"; $("next").classList.remove("hidden");
+}
+function finish(){
+ show("scanning");let n=0;const lines=["Сканирование уровня человечности…","Сверка с базой подозрительных коллег…","Удаление лишней эмпатии…","Запрос одобрения у Бендера…","ВЕРДИКТ ГОТОВ."];
+ const timer=setInterval(()=>{n++;$("scanProgress").style.width=`${n/lines.length*100}%`;$("scanText").textContent=lines[Math.min(n,lines.length-1)];if(n>=lines.length){clearInterval(timer);const b=chosen.filter((v,i)=>v===1||v===2||v===3).length;const verdict=b>=5?"Ваши ответы демонстрируют опасно высокий уровень машинной логики. Рекомендуется избегать людей, совещаний и фразы «быстренький вопрос».":b>=3?"Система обнаружила устойчивые признаки андроида. Маскировка неплохая, но фраза «есть минутка?» вызывает системный сбой.":"Результат спорный. Возможно, вы человек. Не переживайте: у Bender Industries есть программа переквалификации в роботы."; $("personalVerdict").textContent=verdict;show("result");setTimeout(()=>$("humanBar").style.width="4%",80);}},650);
+}
+$("start").onclick=()=>{index=0;chosen=[];show("quiz");renderQuestion();};
+$("next").onclick=()=>{if(index<questions.length-1){index++;renderQuestion();}else finish();};
+$("back").onclick=()=>{if(confirm("Прервать диагностику? Это будет внесено в личное дело."))show("intro");};
+$("again").onclick=()=>{index=0;chosen=[];$("scanProgress").style.width="0";$("humanBar").style.width="0";show("quiz");renderQuestion();};
+</script>
+</body>
+</html>
